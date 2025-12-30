@@ -9,8 +9,8 @@
 
 <style>
 :root{
-  --wheel-size: 85vw;
-  --wheel-offset-y: 220px;     
+  --wheel-size: 75vw;
+  --wheel-offset-y: 180px;     
   --button-offset-y: 260px;    
 }
 html,body{
@@ -18,7 +18,7 @@ html,body{
   height:100%;
   margin:0;
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-  background: url('22.png') center/cover no-repeat;
+  background: url('24.png') center/cover no-repeat;
   color:#fff;
   display:flex;
   justify-content:center;
@@ -29,13 +29,13 @@ html,body{
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 25%;
-  height: 25%;
+  width: 45%;
+  height: 45%;
   border-radius: 50%;
   background: url('9.png') center/cover no-repeat;
   transform: translate(-50%, -50%);
   z-index: 15;
-  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+  /* box-shadow: 0 0 10px rgba(0,0,0,0.5); */
 }
 
 .container-game{
@@ -60,7 +60,6 @@ html,body{
   align-items:center;
   justify-content:center;
   border-radius:50%;
-  background: radial-gradient(circle at center, rgba(255,255,255,0.02), transparent 40%);
   overflow:hidden;
   transform: translateY(var(--wheel-offset-y));
 }
@@ -72,6 +71,7 @@ html,body{
   position:relative;
 }
 
+/* 🔴 CHANGE: 72deg instead of 60deg */
 .wheel-segment {
   position: absolute;
   inset: 0;
@@ -79,7 +79,7 @@ html,body{
   background-size: cover;
   background-position: center;
   transform-origin: 50% 50%;
-  mask-image: conic-gradient(from -30deg, black 0deg 60deg, transparent 60deg 360deg);
+  mask-image: conic-gradient(from -36deg, black 0deg 72deg, transparent 72deg 360deg);
 }
 
 .pointer {
@@ -93,58 +93,29 @@ html,body{
   border-right: 80px solid transparent;
   border-bottom: 100px solid #fff;
   z-index: 20;
-  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.6));
 }
 
-.btn-start {
-  position: absolute;
-  top: calc(80% + var(--button-offset-y));
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 400px;
-  height: 120px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  font-size: 4.4rem;
-  border-radius: 12px;
-  z-index: 100;
-  background: linear-gradient(145deg, #f7d848 , #f7d848 );
-  color: #fff;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out, box-shadow 0.3s ease-in-out;
-  box-shadow: 0 6px 0 #9b1c4b , 0 6px 12px rgba(0,0,0,0.4), inset 0 -3px 5px rgba(0,0,0,0.2);
-}
-
-.btn-start:hover {
-  transform: translate(-50%, -50%) translateY(-3px) scale(1.05);
-  box-shadow: 0 10px 0 #9b1c4b , 0 12px 20px rgba(0,0,0,0.5), inset 0 -3px 5px rgba(0,0,0,0.2);
-}
-
-.btn-start:active {
-  transform: translate(-50%, -50%) translateY(2px) scale(0.98);
-  box-shadow: 0 4px 0 #9b1c4b , 0 6px 12px rgba(0,0,0,0.3), inset 0 -2px 4px rgba(0,0,0,0.2);
-}
+.btn-start { position: absolute; top: calc(80% + var(--button-offset-y)); left: 50%; transform: translate(-50%, -50%); width: 400px; height: 120px; font-weight: 700; letter-spacing: 0.06em; font-size: 4.4rem; border-radius: 12px; z-index: 100; background: linear-gradient(145deg, #f7d848 , #f7d848 ); color: #fff; border: none; cursor: pointer; transition: all 0.2s ease-in-out, box-shadow 0.3s ease-in-out; box-shadow: 0 6px 0 #9b1c4b , 0 6px 12px rgba(0,0,0,0.4), inset 0 -3px 5px rgba(0,0,0,0.2); }
 </style>
 </head>
 <body>
 
-<div class="pointer" id="pointer"></div>
+<div class="pointer"></div>
 
 <div class="container-game">
-  <div class="wheel-wrap mx-auto">
+  <div class="wheel-wrap">
     <div class="wheel" id="wheel">
-      <div class="wheel-segment" style="transform: rotate(0deg); background-image:url('E.png');"></div>
-      <div class="wheel-segment" style="transform: rotate(60deg); background-image:url('c.png');"></div>
-      <div class="wheel-segment" style="transform: rotate(120deg); background-image:url('E.png');"></div>
-      <div class="wheel-segment" style="transform: rotate(180deg); background-image:url('s.png');"></div>
-      <div class="wheel-segment" style="transform: rotate(240deg); background-image:url('tt.png');"></div>
-      <div class="wheel-segment" style="transform: rotate(300deg); background-image:url('t.png');"></div>
+      <!-- 🔴 CHANGE: rotations 0,72,144,216,288 -->
+      <div class="wheel-segment" style="transform: rotate(0deg);   background-image:url('E.png');"></div>
+      <div class="wheel-segment" style="transform: rotate(72deg);  background-image:url('c.png');"></div>
+      <div class="wheel-segment" style="transform: rotate(144deg); background-image:url('t.png');"></div>
+      <div class="wheel-segment" style="transform: rotate(216deg); background-image:url('tt.png');"></div>
+      <div class="wheel-segment" style="transform: rotate(288deg); background-image:url('s.png');"></div>
     </div>
     <div class="wheel-center"></div>
   </div>
 
-  <button class="btn btn-lg btn-primary btn-start" id="startBtn">START</button>
+  <button class="btn btn-start" id="startBtn">START</button>
 </div>
 
 <script>
@@ -156,85 +127,63 @@ html,body{
   let rotation = 0;
   let animFrame;
 
+  /* 🔴 OPTIONAL but correct: 5 videos for 5 parts */
   const winnerVideos = [
     { src: 'Er.mp4',  max: 80, played: 0 },
     { src: 'cap.mp4', max: 45, played: 0 },
-    { src: 'try.mp4', max: 40, played: 0 },
+    { src: 'try.mp4', max: 100, played: 0 },
     { src: 'Sh.mp4',  max: 45, played: 0 },
-    { src: 'Sc.mp4',  max: 75, played: 0 },
-    { src: 'try.mp4', max: 20, played: 0 }
+    { src: 'Sc.mp4',  max: 75, played: 0 }
   ];
-
-  // Preload videos
-  winnerVideos.forEach(v => {
-    const vid = document.createElement('video');
-    vid.src = v.src;
-    vid.preload = 'auto';
-  });
 
   function getRandomVideo(){
     const available = winnerVideos.filter(v => v.played < v.max);
-    if(available.length === 0) return null;
+    if(!available.length) return null;
     return available[Math.floor(Math.random() * available.length)];
   }
 
   function spinWheel(){
-    rotation += 10; // speed
+    rotation += 10;
     wheel.style.transform = `rotate(${rotation}deg)`;
     animFrame = requestAnimationFrame(spinWheel);
   }
 
-  startBtn.addEventListener('click', function() {
+  startBtn.onclick = () => {
     if(spinning) return;
-
-    const selectedVideo = getRandomVideo();
-    if(!selectedVideo){
-      alert('All winner videos reached their limit!');
-      return;
-    }
+    const vid = getRandomVideo();
+    if(!vid) return alert('All videos finished');
 
     spinning = true;
     startBtn.disabled = true;
-
-    // start continuous spin
     spinWheel();
 
-    // Show video after 6 seconds
     setTimeout(() => {
-      selectedVideo.played++;
+      vid.played++;
 
-      const winnerDiv = document.createElement('div');
-      winnerDiv.id = 'winnerPopup';
-      winnerDiv.style.position = 'fixed';
-      winnerDiv.style.inset = '0';
-      winnerDiv.style.zIndex = '9999';
-      winnerDiv.style.background = 'transparent';
+      const wrap = document.createElement('div');
+      wrap.style.position='fixed';
+      wrap.style.inset='0';
+      wrap.style.zIndex='9999';
 
       const video = document.createElement('video');
-      video.src = selectedVideo.src;
+      video.src = vid.src;
       video.autoplay = true;
       video.muted = true;
-      video.playsInline = true;
-      video.preload = 'auto';
-      video.style.width = '100%';
-      video.style.height = '100%';
-      video.style.objectFit = 'cover';
+      video.style.width='100%';
+      video.style.height='100%';
+      video.style.objectFit='cover';
 
-      winnerDiv.appendChild(video);
-      document.body.appendChild(winnerDiv);
+      wrap.appendChild(video);
+      document.body.appendChild(wrap);
 
-      video.addEventListener('loadeddata', () => video.play());
-
-      // Stop spin when video ends (after 6 seconds)
-      setTimeout(() => {
+      setTimeout(()=>{
         cancelAnimationFrame(animFrame);
-        spinning = false;
-        winnerDiv.remove();
-        startBtn.disabled = false;
-      }, 6000);
-
-    }, 6000);
-  });
+        wrap.remove();
+        spinning=false;
+        startBtn.disabled=false;
+      },6000);
+    },6000);
+  };
 })();
 </script>
 
