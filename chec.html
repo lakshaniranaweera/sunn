@@ -82,7 +82,9 @@
       height:100%;
       border-radius:50%;
       position:relative;
-      transition: transform var(--spin-time) cubic-bezier(.17,.84,.44,1);
+     transition: transform var(--spin-time) cubic-bezier(0.1, 0.8, 0.2, 1);
+
+
     }
 
     .wheel-segment {
@@ -264,56 +266,93 @@
   let currentRotation = 0;
   let spinning = false;
 
-  // Winner videos
-  const winnerVideos = ['Er.mp4','cap.mp4','try.mp4','Sh.mp4','Sc.mp4','try.mp4'];
-  let sequenceIndex = 0;
+  /* ===============================
+     🎥 WINNER VIDEOS WITH LIMITS
+  =============================== */
+  const winnerVideos = [
+    { src: 'Er.mp4',  max: 80, played: 0 },
+    { src: 'cap.mp4', max: 45, played: 0 },
+    { src: 'try.mp4', max: 40, played: 0 },
+    { src: 'Sh.mp4',  max: 45, played: 0 },
+    { src: 'Sc.mp4',  max: 75, played: 0 },
+    { src: 'try.mp4', max: 20, played: 0 }
+  ];
 
-  function showVideo(index){
-    const existing = document.getElementById('winnerPopup');
-    if(existing) existing.remove();
+  /* ===============================
+     🎲 GET RANDOM AVAILABLE VIDEO
+  =============================== */
+  function getRandomVideo(){
+    const available = winnerVideos.filter(v => v.played < v.max);
+    if(available.length === 0) return null;
 
-    const videoSrc = winnerVideos[index];
-
-    const winnerDiv = document.createElement('div');
-    winnerDiv.id = 'winnerPopup';
-    winnerDiv.style.position = 'fixed';
-    winnerDiv.style.inset = '0';
-    winnerDiv.style.background = 'rgba(0,0,0,0.8)';
-    winnerDiv.style.display = 'flex';
-    winnerDiv.style.alignItems = 'center';
-    winnerDiv.style.justifyContent = 'center';
-    winnerDiv.style.zIndex = '9999';
-    winnerDiv.innerHTML = `
-      <video width="100%" height="100%" autoplay muted playsinline style="object-fit:cover;">
-        <source src="${videoSrc}" type="video/mp4">
-      </video>
-    `;
-    document.body.appendChild(winnerDiv);
-
-    setTimeout(() => { winnerDiv.remove(); }, 6000); // show for 6 seconds
+    const randomIndex = Math.floor(Math.random() * available.length);
+    return available[randomIndex];
   }
 
+ 
+  function showVideo(videoObj){
+  const existing = document.getElementById('winnerPopup');
+  if(existing) existing.remove();
+
+  videoObj.played++;
+
+  const winnerDiv = document.createElement('div');
+  winnerDiv.id = 'winnerPopup';
+  winnerDiv.style.position = 'fixed';
+  winnerDiv.style.inset = '0';
+  winnerDiv.style.zIndex = '9999';
+  winnerDiv.style.background = 'transparent'; // ❌ no black screen
+
+  const video = document.createElement('video');
+  video.src = videoObj.src;
+  video.autoplay = true;
+  video.muted = true;
+  video.playsInline = true;
+  video.preload = 'auto';
+  video.style.width = '100%';
+  video.style.height = '100%';
+  video.style.objectFit = 'cover';
+
+  winnerDiv.appendChild(video);
+  document.body.appendChild(winnerDiv);
+
+  // 🔥 Force play as soon as ready
+  video.addEventListener('loadeddata', () => {
+    video.play();
+  });
+
+  // Remove after 6 seconds
+  setTimeout(() => {
+    winnerDiv.remove();
+  }, 6000);
+}
+
+
+  /* ===============================
+     🎡 SPIN ACTION
+  =============================== */
   startBtn.addEventListener('click', async function(){
     if(spinning) return;
+
+    const selectedVideo = getRandomVideo();
+    if(!selectedVideo){
+      alert('All winner videos reached their limit!');
+      return;
+    }
+
     spinning = true;
     startBtn.disabled = true;
 
-    const chosen = sequenceIndex;
-    sequenceIndex = (sequenceIndex + 1) % winnerVideos.length;
+    const spinTime = 5000;
+    const rotations = 9;
+    currentRotation += rotations * 360;
 
-    // Medium speed spin for 6 seconds
-    const spinTime = 6000; // 6 seconds
-    const rotations = 3 * (spinTime / 1000); // 3 rotations/sec, adjust as needed
-    const angle = rotations * 360;
-    currentRotation += angle;
+    wheel.style.transition = `transform ${spinTime/1000}s linear`;
+    wheel.style.transform = `rotate(${currentRotation}deg)`;
 
-    wheel.style.transition = `transform ${spinTime/1000}s linear`; // same speed
-    requestAnimationFrame(() => { wheel.style.transform = `rotate(${currentRotation}deg)`; });
-
-    // Wait 6 seconds then show winner video
     await new Promise(res => setTimeout(res, spinTime));
 
-    showVideo(chosen);
+    showVideo(selectedVideo);
 
     spinning = false;
     startBtn.disabled = false;
@@ -321,6 +360,7 @@
 
 })();
 </script>
+
 
 </body>
 </html>
